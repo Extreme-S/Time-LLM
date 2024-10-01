@@ -27,16 +27,16 @@ DATA_BODY_KEY = "text"
 DATA_LABEL_KEY = "label"
 
 # 加载数据集、训练集、验证集
-raw_datasets = load_dataset("rotten_tomatoes", cache_dir='./dataset')
+raw_datasets = load_dataset("rotten_tomatoes", cache_dir='./cache_all/dataset')
 raw_train_dataset = raw_datasets["train"]
 raw_valid_dataset = raw_datasets["validation"]
 columns = raw_train_dataset.column_names
 
 # 初始化tokenizer、模型(开启节省显存配置)，定义labels，设置随机种子
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, trust_remote_code=True, cache_dir='./cache_all/tokenizer')
 tokenizer.add_special_tokens({"pad_token": "[PAD]"})
 tokenizer.pad_token_id = 0
-model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(MODEL_NAME, trust_remote_code=True, cache_dir='./cache_all/causal_llm')
 model.gradient_checkpointing_enable()
 named_labels = ["neg", "pos"]
 label_ids = [tokenizer(named_labels[i], add_special_tokens=False)["input_ids"][0] for i in range(len(named_labels))]
