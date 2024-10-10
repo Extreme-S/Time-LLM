@@ -113,21 +113,14 @@ collater = DataCollatorWithPadding(
 
 def compute_metric(eval_predictions):
     predictions, labels = eval_predictions
-
     label_indices = (labels != -100).nonzero()
     actual_labels = labels[label_indices]
-
     label_indices = (label_indices[0], label_indices[1] - 1)
     selected_logits = predictions[label_indices]
-
     predicted_labels = selected_logits[:, label_ids].argmax(axis=-1)
-
     predicted_labels = np.array(label_ids)[predicted_labels]
-
     correct_predictions = (predicted_labels == actual_labels).sum()
-
     accuracy = correct_predictions / len(labels)
-
     return {"acc": accuracy}
 
 
